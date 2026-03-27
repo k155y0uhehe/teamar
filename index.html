@@ -1,195 +1,131 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+<!DOCTYPE html><html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>i love you❤️</title>
-
-<style>
-body {
-    margin: 0;
-    background: linear-gradient(135deg, #ff9a9e, #fad0c4);
-    overflow: hidden;
-    font-family: Arial;
+  <meta charset="UTF-8">
+  <title>Envelope de Amor</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+    }
+.heart {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: red;
+  transform: rotate(45deg);
+  animation: float 6s infinite;
+  opacity: 0.7;
 }
 
-canvas {
-    display: block;
+.heart::before,
+.heart::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: red;
+  border-radius: 50%;
 }
 
-#finalText {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(0);
-    text-align: center;
-    color: white;
-    opacity: 0;
-    transition: 1.5s;
+.heart::before {
+  top: -10px;
+  left: 0;
 }
 
-#finalText h1 {
-    font-size: 40px;
+.heart::after {
+  left: -10px;
+  top: 0;
 }
 
-#finalText p {
-    font-size: 18px;
+@keyframes float {
+  0% { transform: translateY(100vh) rotate(45deg); }
+  100% { transform: translateY(-10vh) rotate(45deg); }
 }
-</style>
+
+.envelope {
+  position: relative;
+  width: 300px;
+  height: 200px;
+  background: #fff;
+  border-radius: 10px;
+  cursor: pointer;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.flap {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #ff6b81;
+  clip-path: polygon(0 0, 50% 50%, 100% 0);
+  transform-origin: top;
+  transition: 0.6s;
+  z-index: 2;
+}
+
+.letter {
+  position: absolute;
+  width: 90%;
+  height: 90%;
+  background: #fff;
+  top: 5%;
+  left: 5%;
+  border-radius: 10px;
+  padding: 15px;
+  box-sizing: border-box;
+  transform: translateY(100%);
+  transition: 0.6s;
+  text-align: center;
+  overflow-y: auto;
+}
+
+.open .flap {
+  transform: rotateX(180deg);
+}
+
+.open .letter {
+  transform: translateY(0);
+}
+
+h2 {
+  margin-top: 0;
+  color: #ff6b81;
+}
+
+  </style>
 </head>
-
-<body>
-
-<canvas id="canvas"></canvas>
-
-<div id="finalText">
-    <h1>EU TE AMO ❤️</h1>
+<body><div class="envelope" onclick="openEnvelope(this)">
+  <div class="flap"></div>
+  <div class="letter">
+    <h2>Meu Amor 💖</h2>
     <p>
-        Eu te amo muito...<br>
-        você é muito importante pra mim.<br>
-        Eu te amo de verdade ❤️<br>
-        e só quero te fazer feliz.<br>
-        você é a melhor partedo meu dia <br>
-    </p>
-</div>
+      Eu só queria te lembrar o quanto você é importante pra mim.
+      Você ilumina meus dias, faz tudo ficar mais leve e bonito.
+      Cada momento ao seu lado é especial e eu sou muito feliz por ter você.Eu te amo mais do que palavras conseguem explicar.
+  💕
+</p>
 
-<script>
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
+  </div>
+</div><audio autoplay loop>
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+</audio><script>
+  function openEnvelope(el) {
+    el.classList.toggle('open');
+  }
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-let particles = [];
-let targets = [];
-let indexTarget = 0;
-let completed = false;
-
-for(let t = 0; t < Math.PI * 2; t += 0.15) {
-    let x = 16 * Math.pow(Math.sin(t), 3);
-    let y = -(13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
-
-    targets.push({
-        x: canvas.width/2 + x * 12,
-        y: canvas.height/2 + y * 12
-    });
-}
-
-function drawStickman() {
-    ctx.strokeStyle = "white";
-    ctx.lineWidth = 5;
-
-    let x = 200;
-    let y = canvas.height - 250;
-
-    ctx.beginPath();
-    ctx.arc(x, y, 40, 0, Math.PI * 2);
-    ctx.stroke();
-
-    ctx.beginPath();
-    ctx.moveTo(x, y + 40);
-    ctx.lineTo(x, y + 140);
-    ctx.stroke();
-
-    ctx.beginPath();
-    ctx.moveTo(x, y + 70);
-    ctx.lineTo(x + 120, y + 40);
-    ctx.stroke();
-
-    ctx.beginPath();
-    ctx.moveTo(x, y + 70);
-    ctx.lineTo(x - 80, y + 40);
-    ctx.stroke();
-
-    ctx.beginPath();
-    ctx.moveTo(x, y + 140);
-    ctx.lineTo(x - 60, y + 220);
-    ctx.moveTo(x, y + 140);
-    ctx.lineTo(x + 60, y + 220);
-    ctx.stroke();
-}
-
-canvas.addEventListener("click", () => {
-    if(completed) return;
-
-    let isHeart = Math.random() > 0.3;
-
-    let particle = {
-        x: 320,
-        y: canvas.height - 210,
-        tx: Math.random() * canvas.width,
-        ty: Math.random() * canvas.height,
-        type: isHeart ? "heart" : "text"
-    };
-
-    if(particle.type === "heart" && indexTarget < targets.length) {
-        particle.targetX = targets[indexTarget].x;
-        particle.targetY = targets[indexTarget].y;
-        particle.locked = true;
-        indexTarget++;
-    } else {
-        particle.locked = false;
-    }
-
-    particles.push(particle);
-
-    if(indexTarget >= targets.length) {
-        completed = true;
-    }
-});
-
-function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    drawStickman();
-
-    let scale = 1;
-
-    if(completed) {
-        scale = 1 + Math.sin(Date.now() * 0.005) * 0.08;
-    }
-
-    particles.forEach(p => {
-
-        if(p.locked) {
-            let centerX = canvas.width/2;
-            let centerY = canvas.height/2;
-
-            let offsetX = p.targetX - centerX;
-            let offsetY = p.targetY - centerY;
-
-            let targetX = centerX + offsetX * scale;
-            let targetY = centerY + offsetY * scale;
-
-            p.x += (targetX - p.x) * 0.08;
-            p.y += (targetY - p.y) * 0.08;
-
-        } else {
-            p.x += (p.tx - p.x) * 0.03;
-            p.y += (p.ty - p.y) * 0.03;
-        }
-
-        if(p.type === "heart") {
-            ctx.font = "22px Arial";
-            ctx.fillText("❤️", p.x, p.y);
-        } else {
-            ctx.font = "16px Arial";
-            ctx.fillStyle = "white";
-            ctx.fillText("Eu te amo", p.x, p.y);
-        }
-    });
-
-    if(completed) {
-        const text = document.getElementById("finalText");
-        text.style.opacity = 1;
-        text.style.transform = "translate(-50%, -50%) scale(1)";
-    }
-
-    requestAnimationFrame(animate);
-}
-
-animate();
-</script>
-
-</body>
+  for (let i = 0; i < 30; i++) {
+    let heart = document.createElement('div');
+    heart.className = 'heart';
+    heart.style.left = Math.random() * 100 + 'vw';
+    heart.style.animationDuration = (Math.random() * 3 + 3) + 's';
+    document.body.appendChild(heart);
+  }
+</script></body>
 </html>
